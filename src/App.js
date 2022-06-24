@@ -53,16 +53,14 @@ function App() {
       } catch (e) {
         setBigData({});
 
-        if (lat !== '' && lon !== '') {
+        if (lat !== '' && lon !== '' && lat !== '-' && lon !== '-') {
           alert('Wrong courdinates')
         }
       }
 
 
       const some = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
-      const response = await fetch(some.url);
-      const json = await response.json()
-      console.log(json);
+      const json = await some.json()
 
       setBigData5(json)
 
@@ -75,8 +73,9 @@ function App() {
 
   }, [lat, lon]);
 
+
   return (
-    <>
+    <div className="bodyy">
       <h1>Hello from Weather App</h1>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -90,18 +89,61 @@ function App() {
         </input>
       </div>
 
+      <div className="currentWeather">
 
-      <div>
-        <p>City: {bigData.name ? bigData.name : 'No name found for these courdinates'}</p>
-        <p>Country: {bigData.sys?.country ? bigData.sys.country : 'No country name found for these courdinates'}</p>
-        <p>Temperture: {bigData.main?.temp ? bigData.main?.temp : 'Couldnt find the right temperture'}</p>
+        <h2>Current Weather</h2>
+        <div>
+          <p>City: {bigData.name ? bigData.name : 'No name found for these courdinates'}</p>
+          <p>Country: {bigData.sys?.country ? bigData.sys.country : 'No country name found for these courdinates'}</p>
+          <p>Temperture: {bigData.main?.temp ? bigData.main?.temp : 'Couldnt find the right temperture'}</p>
 
-        <p>Description: {
-          bigData?.weather?.length &&
-            bigData?.weather[0]?.description ? bigData.weather[0]?.description : 'No description found here'}</p>
-
+          <p>Description: {
+            bigData?.weather?.length &&
+              bigData?.weather[0]?.description ? bigData.weather[0]?.description : 'No description found here'}</p>
+        </div>
       </div>
-    </>
+
+
+      <table style={{ border: "1px solid black" }}>
+
+        <thead>
+          <tr>
+            <th style={{ borderRight: "1px solid black", borderBottom: "1px solid black" }}>Days</th>
+            <th style={{ borderBottom: "1px solid black" }}>Temp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ borderRight: "1px solid black", borderBottom: "1px solid black" }}>Day1</td>
+            <td style={{ borderBottom: "1px solid black" }}>{bigData5?.list?.length && bigData5?.list[0]?.main?.temp || 0}</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr >
+            <td style={{ borderRight: "1px solid black", borderBottom: "1px solid black" }}>Day2</td>
+            <td style={{ borderBottom: "1px solid black" }} >{bigData5?.list?.length && bigData5?.list[1]?.main?.temp || 0}</td>
+          </tr>
+        </tbody> <tbody>
+          <tr >
+            <td style={{ borderRight: "1px solid black", borderBottom: "1px solid black" }}>Day3</td>
+            <td style={{ borderBottom: "1px solid black" }} >{bigData5?.list?.length && bigData5?.list[2]?.main?.temp || 0}</td>
+          </tr>
+        </tbody> <tbody>
+          <tr >
+            <td style={{ borderRight: "1px solid black", borderBottom: "1px solid black" }}>Day4</td>
+            <td style={{ borderBottom: "1px solid black" }} >{bigData5?.list?.length && bigData5?.list[3]?.main?.temp || 0}</td>
+          </tr>
+        </tbody> <tbody>
+          <tr>
+            <td style={{ borderRight: "1px solid black" }}>Day5</td>
+            <td>{bigData5?.list?.length && bigData5?.list[4]?.main?.temp || 0}</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+
+    </div>
   );
 }
 
